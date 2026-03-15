@@ -11,6 +11,32 @@ const GROQ_API_KEY  = process.env.GROQ_API_KEY;
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const groq = new Groq({ apiKey: GROQ_API_KEY });
 
+// ─── Random helpers ───────────────────────────────────────
+const topics = [
+  'childhood memories', 'embarrassing moments', 'secret crushes', 'biggest fears',
+  'family drama', 'friendship betrayals', 'romantic experiences', 'weird habits',
+  'biggest regrets', 'unpopular opinions', 'guilty pleasures', 'biggest lies told',
+  'awkward situations', 'dreams and ambitions', 'jealousy', 'insecurities',
+  'first times', 'money and success', 'social media behavior', 'petty thoughts',
+  'things you pretend to like', 'things you secretly judge people for',
+  'most rebellious moments', 'strangest beliefs', 'biggest mistakes',
+];
+
+const angles = [
+  'be really specific and personal',
+  'make it about a situation most people have experienced but never talk about',
+  'make it slightly uncomfortable but not mean',
+  'make it funny and relatable',
+  'make it surprisingly deep',
+  'make it about something people are usually too embarrassed to admit',
+  'make it about a hidden or private thought',
+  'make it about a real life social situation',
+];
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 // ─── Slash commands ───────────────────────────────────────
 const commands = [
   new SlashCommandBuilder()
@@ -53,22 +79,29 @@ async function registerCommands() {
 // ─── AI prompt helper ─────────────────────────────────────
 async function getTruthQuestion(vibe) {
   const vibeDescriptions = {
-    fun:    'fun, light-hearted, and suitable for a friend group of any age',
+    fun:    'fun and light-hearted, suitable for any age group',
     spicy:  'flirty and a little spicy — for adults, suggestive but not explicit',
     deep:   'deep, thoughtful, and introspective — makes people really reflect',
-    random: ['fun and light-hearted', 'flirty and spicy', 'deep and introspective'][Math.floor(Math.random() * 3)],
+    random: pick(['fun and light-hearted', 'flirty and spicy', 'deep and introspective']),
   };
 
   const vibeDesc = vibeDescriptions[vibe] || vibeDescriptions['fun'];
+  const topic = pick(topics);
+  const angle = pick(angles);
 
   const response = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [{
       role: 'user',
-      content: `Generate ONE creative and interesting truth question for a "Truth or Truth" game. Vibe: ${vibeDesc}. Return only the question itself — no quotes, no numbering, no extra text.`
+      content: `Generate ONE truth question for a "Truth or Truth" game.
+Vibe: ${vibeDesc}
+Topic: ${topic}
+Angle: ${angle}
+
+The question must be unique, creative, and not generic. Return only the question — no quotes, no numbering, no extra text.`
     }],
     max_tokens: 150,
-    temperature: 0.95,
+    temperature: 1.0,
   });
 
   return response.choices[0].message.content.trim();
@@ -97,13 +130,11 @@ function buildButton(vibe) {
 function attachCollector(message, embed, vibe) {
   const collector = message.createMessageComponentCollector({
     componentType: ComponentType.Button,
-    max: 1, // fires once then stops — no timeout
+    max: 1,
   });
 
   collector.on('collect', async (btn) => {
     await btn.deferUpdate();
-
-    // Remove button from clicked message
     await btn.editReply({ embeds: [embed], components: [] });
 
     try {
