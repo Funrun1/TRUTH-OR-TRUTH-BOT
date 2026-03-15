@@ -22,17 +22,6 @@ const topics = [
   'most rebellious moments', 'strangest beliefs', 'biggest mistakes',
 ];
 
-const angles = [
-  'be really specific and personal',
-  'make it about a situation most people have experienced but never talk about',
-  'make it slightly uncomfortable but not mean',
-  'make it funny and relatable',
-  'make it surprisingly deep',
-  'make it about something people are usually too embarrassed to admit',
-  'make it about a hidden or private thought',
-  'make it about a real life social situation',
-];
-
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -79,28 +68,33 @@ async function registerCommands() {
 // ─── AI prompt helper ─────────────────────────────────────
 async function getTruthQuestion(vibe) {
   const vibeDescriptions = {
-    fun:    'fun and light-hearted, suitable for any age group',
-    spicy:  'flirty and a little spicy — for adults, suggestive but not explicit',
-    deep:   'deep, thoughtful, and introspective — makes people really reflect',
-    random: pick(['fun and light-hearted', 'flirty and spicy', 'deep and introspective']),
+    fun:    'fun and light-hearted',
+    spicy:  'flirty and a little spicy for adults',
+    deep:   'deep and personal',
+    random: pick(['fun and light-hearted', 'flirty and spicy', 'deep and personal']),
   };
 
   const vibeDesc = vibeDescriptions[vibe] || vibeDescriptions['fun'];
   const topic = pick(topics);
-  const angle = pick(angles);
 
   const response = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [{
       role: 'user',
-      content: `Generate ONE truth question for a "Truth or Truth" game.
-Vibe: ${vibeDesc}
-Topic: ${topic}
-Angle: ${angle}
+      content: `Write a single truth question for a Truth or Truth game.
 
-The question must be unique, creative, and not generic. Return only the question — no quotes, no numbering, no extra text.`
+Rules:
+- MUST be a question (end with a ?)
+- ONE sentence only, short and easy to read
+- Thought provoking — makes the person pause and think honestly about themselves
+- About: ${topic}
+- Vibe: ${vibeDesc}
+- No complicated words, no long sentences
+- Do not start with "Have you ever" every time — vary the phrasing
+
+Return only the question. Nothing else.`
     }],
-    max_tokens: 150,
+    max_tokens: 60,
     temperature: 1.0,
   });
 
