@@ -1,3 +1,5 @@
+//This is what I coded along with the package, and the readme, the rest just pulled up automatically somehow..
+
 require('dotenv').config();
 const http = require('http');
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
