@@ -1,6 +1,6 @@
-# 🤔 Truth or Truth — Discord Bot
+# Truth or Truth — Discord Bot
 
-An AI-powered Truth or Truth bot for Discord. Every question is unique, generated live by ChatGPT.
+An AI-powered Truth or Truth bot for Discord. Every question is unique, generated live by GROK AI.
 
 ---
 
