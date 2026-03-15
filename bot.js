@@ -103,11 +103,12 @@ Return only the question. Nothing else.`
 
 // ─── Build embed + button ─────────────────────────────────
 function buildEmbed(question, username, vibe) {
+  const vibeLabel = vibe === 'spicy' ? 'personal' : vibe;
   return new EmbedBuilder()
     .setColor(0x7F77DD)
     .setTitle('TRUTH')
     .setDescription(question)
-    .setFooter({ text: `Asked to ${username} • Truth or Truth • vibe: ${vibe}` })
+    .setFooter({ text: `Asked to ${username} • Truth or Truth • vibe: ${vibeLabel}` })
     .setTimestamp();
 }
 
