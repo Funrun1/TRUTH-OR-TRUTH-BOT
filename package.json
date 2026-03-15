@@ -1,13 +1,14 @@
 {
   "name": "truth-or-truth-bot",
   "version": "1.0.0",
-  "description": "AI-powered Truth or Truth Discord bot",
+  "description": "AI-powered Truth or Truth Discord bot using Groq (free)",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
-    "openai": "^4.47.1"
+    "groq-sdk": "^0.3.3",
+    "dotenv": "^16.4.5"
   }
 }
