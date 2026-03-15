@@ -62,7 +62,7 @@ async function getTruthQuestion(vibe) {
   const vibeDesc = vibeDescriptions[vibe] || vibeDescriptions['fun'];
 
   const response = await groq.chat.completions.create({
-    model: 'llama3-8b-8192',
+    model: 'llama-3.3-70b-versatile',
     messages: [{
       role: 'user',
       content: `Generate ONE creative and interesting truth question for a "Truth or Truth" game. Vibe: ${vibeDesc}. Return only the question itself — no quotes, no numbering, no extra text.`
