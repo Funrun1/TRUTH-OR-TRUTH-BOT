@@ -48,7 +48,7 @@ const commands = [
         .setDescription('Choose the vibe')
         .addChoices(
           { name: 'Fun & clean', value: 'fun' },
-          { name: 'Spicy', value: 'spicy' },
+          { name: 'Personal', value: 'spicy' },
           { name: 'Deep', value: 'deep' },
           { name: 'Random', value: 'random' },
         )),
