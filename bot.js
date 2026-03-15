@@ -1,4 +1,5 @@
 require('dotenv').config();
+const http = require('http');
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js');
 const Groq = require('groq-sdk');
 
@@ -173,3 +174,11 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.login(DISCORD_TOKEN);
+
+// ─── Ping server (for uptime monitoring) ──────────────────
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('OK');
+}).listen(3000, '0.0.0.0', () => {
+  console.log('Ping server listening on port 3000');
+});
